@@ -39,8 +39,15 @@ int ThreshHold = 7;
 int LiftHold = 5;
 
 //Auto
-int Battery = 100;
-int MeterSeconds = 1;
+int BatteryPower = 100;
+int ReferenceMeters = 10;
+int Reference Seconds = 3;
+int DesiredMeters = 20;
+int DesiredSeconds = 9;
+int Seconds = 11;
+int Time = 12000;
+int DesiredRadians = 2
+int Reference =
 
 
 
@@ -60,13 +67,20 @@ void initializeRobot() //This function is used before the rest of the program st
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////Control Functions///////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
+//MapRange
+def MapRangeXToRangeY(x,y)
+long map(long x, long in_min, long in_max, long out_min, long out_max)
+{
+	return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+}
+
 //Drive
 void CDrive()
 {
-	if (abs(joystick.joy1_y2) > ThreshHold) motor[MDriveL] = joystick.joy1_y2; //The first part of this line checks to make sure that the absolute value of the joystick is greater than 7, because if it is anywhere between -7 and 7 the robot might move or strain the motors even when you aren't moving the joystick (it is a deadzone). The next part of the line will set the motor to the appropriate power, but only if it is out of the deadzone.
-	else motor[MDriveL] = 0; //This line sets the motor to do nothing if it is inside the deadzone.
-	if (abs(joystick.joy1_y1) > ThreshHold) motor[MDriveR] = joystick.joy1_y1;
-	else motor[MDriveR] = 0;
+	if (abs(joystick.joy1_y1) > ThreshHold) motor[MDriveL] = joystick.joy1_y1; //The first part of this line checks to make sure that the absolute value of the joystick is greater than 7, because if it is anywhere between -7 and 7 the robot might move or strain the motors even when you aren't moving the joystick (it is a deadzone). The next part of the line will set the motor to the appropriate power, but only if it is out of the deadzone.
+	else motor[MDriveR] = 0; //This line sets the motor to do nothing if it is inside the deadzone.
+	if (abs(joystick.joy1_y2) > ThreshHold) motor[MDriveR] = joystick.joy1_y2;
+	else motor[MDriveL] = 0;
 }
 
 //Lift
@@ -114,10 +128,24 @@ void CMaster()
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////Autonomous//////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
-//Drive
-void ADrive(int Seconds, int Time)
+
+//DistanceToMS
+void DistanceToMS()
 {
-	Time = Seconds * 1000;
+	DesiredSeconds = (ReferenceSeconds * DesiredMeters) / ReferenceMeters;
+	Time = DesiredSeconds * 1000;
+}
+
+//RadiansToMS
+void RadiansToMS()
+{
+	DesiredSeconds = (ReferenceSeconds * DesiredRadians) / ReferenceRadians
+}
+
+//DriveS
+void ADriveS()
+{
+	DistanceToMS();
 	ClearTimer(T1);
 	while (time1[T1]<Time)
 	{
@@ -128,10 +156,16 @@ void ADrive(int Seconds, int Time)
 	motor[MDriveR] = 0;
 }
 
-//LiftUp
-void ALiftU(int Seconds, int Time)
+//TurnRight
+void ATurnR()
 {
-	Time = Seconds * 1000;
+	ClearTimer(T1);
+	while (time1[T1]<Time)
+}
+
+//LiftUp
+void ALiftU()
+{
 	ClearTimer(T1);
 	while (time1[T1] < Time)
 	{
@@ -141,9 +175,8 @@ void ALiftU(int Seconds, int Time)
 }
 
 //LiftDown
-void ALiftD(int Seconds, int Time)
+void ALiftD()
 {
-	Time = Seconds * 1000;
 	ClearTimer(T1);
 	while (time1[T1] < Time)
 	{
@@ -153,9 +186,8 @@ void ALiftD(int Seconds, int Time)
 }
 
 //LiftHold
-void ALiftH(int Seconds, int Time)
+void ALiftH()
 {
-	Time = Seconds * 1000;
 	ClearTimer(T1);
 	while (time1[T1] < Time)
 	{
