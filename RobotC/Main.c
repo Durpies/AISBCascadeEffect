@@ -30,10 +30,14 @@ int SClampDown = 65;
 //Door
 int SDoorClosed = 45;
 int SDoorOpen = 184;
+int SDoorTime = 2;
 
 //DeadZone
 int ThreshHold = 7;
 int LiftHold = 5;
+
+//Auto
+int Time = 0;
 
 
 
@@ -53,33 +57,140 @@ void initializeRobot() //This function is used before the rest of the program st
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////Control Functions///////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
-void Control()//This is the main function that will be used.
+//Drive
+void CDrive()
 {
-	getJoystickSettings(joystick);//Get all of the values from the joystick.
-
-	//Drive
-	if(abs(joystick.joy1_y2) > ThreshHold) motor[MDriveL] = joystick.joy1_y2; //The first part of this line checks to make sure that the absolute value of the joystick is greater than 7, because if it is anywhere between -7 and 7 the robot might move or strain the motors even when you aren't moving the joystick (it is a deadzone). The next part of the line will set the motor to the appropriate power, but only if it is out of the deadzone.
+	if (abs(joystick.joy1_y2) > ThreshHold) motor[MDriveL] = joystick.joy1_y2; //The first part of this line checks to make sure that the absolute value of the joystick is greater than 7, because if it is anywhere between -7 and 7 the robot might move or strain the motors even when you aren't moving the joystick (it is a deadzone). The next part of the line will set the motor to the appropriate power, but only if it is out of the deadzone.
 	else motor[MDriveL] = 0; //This line sets the motor to do nothing if it is inside the deadzone.
-	if(abs(joystick.joy1_y1) > ThreshHold) motor[MDriveR] = joystick.joy1_y1;
+	if (abs(joystick.joy1_y1) > ThreshHold) motor[MDriveR] = joystick.joy1_y1;
 	else motor[MDriveR] = 0;
+}
 
-	//Lift
-	if(abs(joystick.joy2_y2) > ThreshHold) motor[MLift] = joystick.joy2_y2; //It does the exact same as the if loop above, but for the lift instead.
+//Lift
+void CLift()
+{
+	if (abs(joystick.joy2_y2) > ThreshHold) motor[MLift] = joystick.joy2_y2; //It does the exact same as the if loop above, but for the lift instead.
 	else motor[MLift] = LiftHold; //Notice that the value used in the deadzone is set to 5 rather than 0, which means that when you aren't pushing on the joystick it still adds a bit of force to the motor, keeping the box and lift at their current height.
+}
 
-	//Sweep
-	if(abs(joystick.joy2_x1) > ThreshHold) motor[MSweep] = joystick.joy2_x1; //The sweep is the exact same as the drive loop, only instead of using the y value, it uses the x value (That should match the direction of the sweeper, left is out, right is in).
+//Sweep
+void CSweep()
+{
+	if (abs(joystick.joy2_x1) > ThreshHold) motor[MSweep] = joystick.joy2_x1; //The sweep is the exact same as the drive loop, only instead of using the y value, it uses the x value (That should match the direction of the sweeper, left is out, right is in).
 	else motor[MSweep] = 0;
+}
 
-	//Clamp
+//Clamp
+void CClamp()
+{
 	if (joystick.joy1_TopHat == 0 || joystick.joy2_TopHat == 0) servo[SClamp] = SClampUp; //When the top hat (the cross) is pushed up, it will set the Clamp to its up position.
 	if (joystick.joy1_TopHat == 4 || joystick.joy2_TopHat == 4) servo[SClamp] = SClampDown;//When the top hat (the cross) is pushed down, it will set the Clamp to its down position.
+}
 
-
-	//Door
+//Door
+void CDoor()
+{
 	if (joy2Btn(2)) servo[SDoor] = SDoorOpen;
 	else servo[SDoor] = SDoorClosed;
 }
+
+//Master
+void CMaster()
+{
+	getJoystickSettings(joystick);//Get all of the values from the joystick.
+	CDrive();
+	CLift();
+	CSweep();
+	CClamp();
+	CDoor();
+}
+
+
+
+
+//////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////Autonomous//////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+//Drive
+void ADrive(int Seconds, )
+{
+	Time = Seconds * 1000;
+	ClearTimer(T1);
+	while (time1[T1]<Time)
+	{
+		motor[MDriveL] = 70;
+		motor[MDriveR] = 70;
+	}
+	motor[MDriveL] = 0;
+	motor[MDriveR] = 0;
+}
+
+//LiftUp
+void ALiftU(int Seconds)
+{
+	Time = Seconds * 1000;
+	ClearTimer(T1);
+	while (time1[T1] < Time)
+	{
+		motor[MLift] = 70;
+	}
+	motor[MLift] = 0;
+}
+
+//LiftDown
+void ALiftD(int Seconds)
+{
+	Time = Seconds * 1000;
+	ClearTimer(T1);
+	while (time1[T1] < Time)
+	{
+		motor[MLift] = -10;
+	}
+	motor[MLift] = 0;
+}
+
+//LiftHold
+void ALiftH(int Seconds)
+{
+	Time = Seconds * 1000;
+	ClearTimer(T1);
+	while (time1[T1] < Time)
+	{
+		motor[MLift] = LiftHold;
+	}
+}
+
+//ClampUp
+void AClampU()
+{
+	servo[SClamp] = SClampUp;
+}
+
+//ClampDown
+void AClampD()
+{
+	servo[SClamp] = SClampDown;
+}
+
+//DoorClose
+void ADoorC()
+{
+	servo[SDoor] = SDoorClosed;
+}
+
+//DoorOpen
+void ADoorO()
+{
+	servo[SDoor] = SDoorClosed;
+}
+
+//Master
+void AMaster()
+{
+
+}
+
+
 
 ///////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////Main///////////////////////////////////
@@ -88,8 +199,8 @@ task main()
 {
 	initializeRobot(); //Run the initialize function to set the servos to their appropriate starting position.
 	waitForStart(); //The program won't continue past this point until told to (you do so by going to Robot ---> Debugger Windows ---> Joystick Controll - Competition.
-	 while(true) //Infinite Loop
+	while (true) //Infinite Loop
 	{
-		Control(); //Allow joystick controls.
+		CMaster(); //Allow joystick controls.
 	}
 }
