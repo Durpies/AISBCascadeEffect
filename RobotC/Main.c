@@ -41,13 +41,15 @@ int LiftHold = 5;
 //Auto
 int BatteryPower = 100;
 int ReferenceMeters = 10;
-int Reference Seconds = 3;
+int ReferenceSeconds = 3;
 int DesiredMeters = 20;
 int DesiredSeconds = 9;
 int Seconds = 11;
 int Time = 12000;
-int DesiredRadians = 2
-int Reference =
+int DesiredRadians = 2;
+int ReferenceRedians = 100;
+int DesiredTurnSeconds = 100;
+int ReferenceTurnSeconds = 304;
 
 
 
@@ -68,7 +70,6 @@ void initializeRobot() //This function is used before the rest of the program st
 ///////////////////////////////Control Functions///////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 //MapRange
-def MapRangeXToRangeY(x,y)
 long map(long x, long in_min, long in_max, long out_min, long out_max)
 {
 	return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
@@ -129,101 +130,101 @@ void CMaster()
 //////////////////////////////////Autonomous//////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
 
-//DistanceToMS
-void DistanceToMS()
-{
-	DesiredSeconds = (ReferenceSeconds * DesiredMeters) / ReferenceMeters;
-	Time = DesiredSeconds * 1000;
-}
+////DistanceToMS
+//void DistanceToMS()
+//{
+//	DesiredSeconds = (ReferenceSeconds * DesiredMeters) / ReferenceMeters;
+//	Time = DesiredSeconds * 1000;
+//}
 
-//RadiansToMS
-void RadiansToMS()
-{
-	DesiredSeconds = (ReferenceSeconds * DesiredRadians) / ReferenceRadians
-}
+////RadiansToMS
+//void RadiansToMS()
+//{
+//	DesiredSeconds = (ReferenceSeconds * DesiredRadians) / ReferenceRadians
+//}
 
-//DriveS
-void ADriveS()
-{
-	DistanceToMS();
-	ClearTimer(T1);
-	while (time1[T1]<Time)
-	{
-		motor[MDriveL] = 70;
-		motor[MDriveR] = 70;
-	}
-	motor[MDriveL] = 0;
-	motor[MDriveR] = 0;
-}
+////DriveS
+//void ADriveS()
+//{
+//	DistanceToMS();
+//	ClearTimer(T1);
+//	while (time1[T1]<Time)
+//	{
+//		motor[MDriveL] = 70;
+//		motor[MDriveR] = 70;
+//	}
+//	motor[MDriveL] = 0;
+//	motor[MDriveR] = 0;
+//}
 
-//TurnRight
-void ATurnR()
-{
-	ClearTimer(T1);
-	while (time1[T1]<Time)
-}
+////TurnRight
+//void ATurnR()
+//{
+//	ClearTimer(T1);
+//	while (time1[T1]<Time)
+//}
 
-//LiftUp
-void ALiftU()
-{
-	ClearTimer(T1);
-	while (time1[T1] < Time)
-	{
-		motor[MLift] = 70;
-	}
-	motor[MLift] = 0;
-}
+////LiftUp
+//void ALiftU()
+//{
+//	ClearTimer(T1);
+//	while (time1[T1] < Time)
+//	{
+//		motor[MLift] = 70;
+//	}
+//	motor[MLift] = 0;
+//}
 
-//LiftDown
-void ALiftD()
-{
-	ClearTimer(T1);
-	while (time1[T1] < Time)
-	{
-		motor[MLift] = -10;
-	}
-	motor[MLift] = 0;
-}
+////LiftDown
+//void ALiftD()
+//{
+//	ClearTimer(T1);
+//	while (time1[T1] < Time)
+//	{
+//		motor[MLift] = -10;
+//	}
+//	motor[MLift] = 0;
+//}
 
-//LiftHold
-void ALiftH()
-{
-	ClearTimer(T1);
-	while (time1[T1] < Time)
-	{
-		motor[MLift] = LiftHold;
-	}
-}
+////LiftHold
+//void ALiftH()
+//{
+//	ClearTimer(T1);
+//	while (time1[T1] < Time)
+//	{
+//		motor[MLift] = LiftHold;
+//	}
+//}
 
-//ClampUp
-void AClampU()
-{
-	servo[SClamp] = SClampUp;
-}
+////ClampUp
+//void AClampU()
+//{
+//	servo[SClamp] = SClampUp;
+//}
 
-//ClampDown
-void AClampD()
-{
-	servo[SClamp] = SClampDown;
-}
+////ClampDown
+//void AClampD()
+//{
+//	servo[SClamp] = SClampDown;
+//}
 
-//DoorClose
-void ADoorC()
-{
-	servo[SDoor] = SDoorClosed;
-}
+////DoorClose
+//void ADoorC()
+//{
+//	servo[SDoor] = SDoorClosed;
+//}
 
-//DoorOpen
-void ADoorO()
-{
-	servo[SDoor] = SDoorClosed;
-}
+////DoorOpen
+//void ADoorO()
+//{
+//	servo[SDoor] = SDoorClosed;
+//}
 
-//Master
-void AMaster()
-{
+////Master
+//void AMaster()
+//{
 
-}
+//}
 
 
 
